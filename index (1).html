@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🐱 Quiz Fofo dos Gatinhos - Pet Shop & Cuidados</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Pacifico&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    :root {
+      --pink-light: #ffe4ec;
+      --pink-soft: #ffb6c1;
+      --pink-medium: #ff69b4;
+      --pink-hot: #ff1493;
+      --pink-deep: #db7093;
+      --cream: #fff5f8;
+      --white: #ffffff;
+      --text: #5a3a4a;
+      --shadow: rgba(255, 105, 180, 0.25);
+    }
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: linear-gradient(135deg, #ffe4ec 0%, #ffc0cb 40%, #ffb6c1 70%, #ffcce0 100%);
+      min-height: 100vh;
+      color: var(--text);
+      overflow-x: hidden;
+      position: relative;
+    }
+    .paw-background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      background-image: 
+        radial-gradient(circle at 10% 20%, rgba(255, 182, 193, 0.4) 0%, transparent 50%),
+        radial-gradient(circle at 90% 80%, rgba(255, 105, 180, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 50% 50%, rgba(255, 228, 236, 0.5) 0%, transparent 70%);
+    }
+    .paw-background::before,
+    .paw-background::after {
+      content: "🐾 🐾 🐾 🐾 🐾 🐾 🐾 🐾 🐾 🐾 🐾 🐾 🐾 🐾 🐾 🐾 🐾 🐾 🐾 🐾";
+      position: absolute;
+      font-size: 2rem;
+      opacity: 0.08;
+      white-space: nowrap;
+      animation: floatPaws 40s linear infinite;
+    }
+    .paw-background::before {
+      top: 10%;
+      left: -20%;
+    }
+    .paw-background::after {
+      top: 60%;
+      left: -30%;
+      animation-delay: -20s;
+      font-size: 1.6rem;
+    }
+    @keyframes floatPaws {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(50%); }
+    }
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 20px;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .screen {
+      display: none;
+      width: 100%;
+      background: var(--white);
+      border-radius: 28px;
+      padding: 32px 28px;
+      box-shadow: 
+        0 20px 60px var(--shadow),
+        0 0 0 6px rgba(255, 182, 193, 0.3);
+      position: relative;
+      animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .screen.active {
+      display: block;
+    }
+    @keyframes popIn {
+      0% { transform: scale(0.9); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .sticker {
+      position: absolute;
+      font-size: 2.2rem;
+      animation: bounce 2.5s ease-in-out infinite;
+      z-index: 2;
+      filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
+    }
+    .sticker-1 { top: -15px; left: 15px; animation-delay: 0s; }
+    .sticker-2 { top: -10px; right: 20px; animation-delay: 0.4s; }
+    .sticker-3 { bottom: -12px; left: 25px; animation-delay: 0.8s; }
+    .sticker-4 { bottom: -10px; right: 15px; animation-delay: 1.2s; }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0) rotate(-5deg); }
+      50% { transform: translateY(-12px) rotate(5deg); }
+    }
+    .title {
+      font-family: 'Pacifico', cursive;
+      font-size: 2.6rem;
+      color: var(--pink-hot);
+      text-align: center;
+      margin-bottom: 8px;
+      text-shadow: 2px 2px 0 rgba(255, 182, 193, 0.6);
+      line-height: 1.2;
+    }
+    .subtitle {
+      text-align: center;
+      font-size: 1.05rem;
+      color: var(--pink-deep);
+      font-weight: 600;
+      margin-bottom: 24px;
+    }
+    .welcome-cats {
+      display: flex;
+      justify-content: center;
+      gap: 18px;
+      margin: 20px 0;
+    }
+    .big-cat {
+      font-size: 3.8rem;
+      animation: wiggle 2s ease-in-out infinite;
+      display: inline-block;
+    }
+    .big-cat:nth-child(2) { animation-delay: 0.3s; }
+    .big-cat:nth-child(3) { animation-delay: 0.6s; }
+    @keyframes wiggle {
+      0%, 100% { transform: rotate(-8deg) scale(1); }
+      50% { transform: rotate(8deg) scale(1.1); }
+    }
+    .intro {
+      text-align: center;
+      font-size: 1.1rem;
+      line-height: 1.6;
+      color: var(--text);
+      margin: 20px 0 30px;
+      padding: 0 10px;
+    }
+    .btn-primary, .btn-secondary {
+      display: block;
+      width: 100%;
+      max-width: 320px;
+      margin: 0 auto;
+      padding: 16px 28px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--pink-medium), var(--pink-hot));
+      color: white;
+      box-shadow: 0 8px 25px rgba(255, 20, 147, 0.4);
+    }
+    .btn-primary:hover {
+      transform: translateY(-3px) scale(1.03);
+      box-shadow: 0 12px 30px rgba(255, 20, 147, 0.5);
+    }
+    .btn-secondary {
+      background: var(--pink-light);
+      color: var(--pink-deep);
+      box-shadow: 0 4px 15px rgba(255, 182, 193, 0.4);
+    }
+    .btn-secondary:hover:not(:disabled) {
+      background: var(--pink-soft);
+      transform: translateY(-2px);
+    }
+    .btn-secondary:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+    .progress-container {
+      margin-bottom: 28px;
+      position: relative;
+    }
+    .progress-bar {
+      height: 12px;
+      background: linear-gradient(90deg, var(--pink-soft), var(--pink-hot));
+      border-radius: 20px;
+      width: 10%;
+      transition: width 0.4s ease;
+      box-shadow: 0 2px 8px rgba(255, 105, 180, 0.4);
+    }
+    .progress-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 12px;
+      background: #ffe4ec;
+      border-radius: 20px;
+      z-index: -1;
+    }
+    #progress-text {
+      display: block;
+      text-align: center;
+      margin-top: 8px;
+      font-weight: 700;
+      color: var(--pink-deep);
+      font-size: 0.95rem;
+    }
+    .question-text {
+      font-size: 1.35rem;
+      font-weight: 800;
+      text-align: center;
+      margin-bottom: 24px;
+      color: var(--pink-hot);
+      line-height: 1.4;
+    }
+    .options-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+    .option-card {
+      background: var(--cream);
+      border: 3px solid transparent;
+      border-radius: 18px;
+      padding: 18px 12px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      position: relative;
+      overflow: hidden;
+    }
+    .option-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 20px var(--shadow);
+      border-color: var(--pink-soft);
+    }
+    .option-card.selected {
+      background: linear-gradient(135deg, #ffb6c1, #ff69b4);
+      border-color: var(--pink-hot);
+      color: white;
+      transform: scale(1.03);
+      box-shadow: 0 8px 25px rgba(255, 20, 147, 0.35);
+    }
+    .option-card.selected .option-text,
+    .option-card.selected .option-desc {
+      color: white;
+    }
+    .option-emoji {
+      font-size: 2.4rem;
+      line-height: 1;
+    }
+    /* ===== ESTILO PARA IMAGENS (funciona em TODAS as perguntas) ===== */
+    .option-img {
+      width: 70px;
+      height: 70px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 3px solid #ffb6c1;
+      box-shadow: 0 4px 10px rgba(255, 105, 180, 0.3);
+      transition: all 0.3s ease;
+    }
+    .option-card.selected .option-img {
+      border-color: white;
+      transform: scale(1.08);
+    }
+    .breed-card .option-img {
+      width: 80px;
+      height: 80px;
+    }
+    .option-text {
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--text);
+    }
+    .option-desc {
+      font-size: 0.78rem;
+      color: var(--pink-deep);
+      font-weight: 600;
+    }
+    .option-card.multi.selected {
+      background: linear-gradient(135deg, #ff9ec7, #ff69b4);
+    }
+    .nav-buttons {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+    }
+    .nav-buttons .btn-primary,
+    .nav-buttons .btn-secondary {
+      max-width: 180px;
+      padding: 14px 20px;
+      font-size: 1rem;
+    }
+    .result-title {
+      font-family: 'Pacifico', cursive;
+      font-size: 2rem;
+      color: var(--pink-hot);
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .result-card {
+      background: linear-gradient(160deg, #fff0f5, #ffe4ec);
+      border-radius: 22px;
+      padding: 28px 22px;
+      text-align: center;
+      border: 3px solid var(--pink-soft);
+      margin-bottom: 24px;
+    }
+    .result-emoji {
+      font-size: 5rem;
+      margin-bottom: 10px;
+      animation: pulse 1.8s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.12); }
+    }
+    #result-name {
+      font-size: 1.6rem;
+      color: var(--pink-hot);
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+    #result-description {
+      font-size: 1.05rem;
+      line-height: 1.55;
+      color: var(--text);
+      margin-bottom: 22px;
+    }
+    .result-details {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 24px;
+      text-align: left;
+    }
+    .detail-item {
+      background: white;
+      padding: 12px 14px;
+      border-radius: 14px;
+      box-shadow: 0 3px 10px rgba(255, 182, 193, 0.3);
+    }
+    .detail-item .label {
+      display: block;
+      font-size: 0.75rem;
+      color: var(--pink-deep);
+      font-weight: 700;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .detail-item span:last-child {
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--text);
+    }
+    .petshop-list {
+      background: white;
+      border-radius: 16px;
+      padding: 18px 20px;
+      text-align: left;
+      box-shadow: 0 4px 15px rgba(255, 182, 193, 0.25);
+    }
+    .petshop-list h4 {
+      color: var(--pink-hot);
+      font-size: 1.1rem;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+    .petshop-list ul {
+      list-style: none;
+    }
+    .petshop-list li {
+      padding: 8px 0;
+      border-bottom: 1px dashed #ffc0cb;
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding-left: 8px;
+    }
+    .petshop-list li:last-child {
+      border-bottom: none;
+    }
+    .petshop-list li::before {
+      content: "🐾 ";
+    }
+    @media (max-width: 520px) {
+      .container { padding: 12px; }
+      .screen { padding: 24px 18px; border-radius: 22px; }
+      .title { font-size: 2.1rem; }
+      .options-grid { grid-template-columns: 1fr; }
+      .result-details { grid-template-columns: 1fr; }
+      .nav-buttons { flex-direction: column; align-items: center; }
+      .nav-buttons .btn-primary,
+      .nav-buttons .btn-secondary { max-width: 100%; }
+      .big-cat { font-size: 3rem; }
+      .sticker { font-size: 1.7rem; }
+    }
+    .option-card.selected .option-emoji {
+      animation: hop 0.4s ease;
+    }
+    @keyframes hop {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.3) rotate(10deg); }
+      100% { transform: scale(1); }
+    }
+  </style>
+</head>
+<body>
+  <div class="paw-background"></div>
+  
+  <div class="container">
+    <!-- Tela de Boas-vindas -->
+    <section id="welcome" class="screen active">
+      <div class="sticker sticker-1">🐾</div>
+      <div class="sticker sticker-2">🎀</div>
+      <div class="sticker sticker-3">😺</div>
+      <div class="sticker sticker-4">💖</div>
+      
+      <h1 class="title">🐱 Quiz dos Gatinhos</h1>
+      <p class="subtitle">Pet Shop • Roupinhas • Lacinhos • Cuidados 💕</p>
+      
+      <div class="welcome-cats">
+        <span class="big-cat">😻</span>
+        <span class="big-cat">🐱</span>
+        <span class="big-cat">🐈</span>
+      </div>
+      
+      <p class="intro">Descubra o estilo perfeito do seu felino!  
+        Responda sobre gênero, pelagem, raças, roupinhas e muito mais ✨</p>
+      
+      <button id="start-btn" class="btn-primary">Começar o Quiz! 🐾</button>
+    </section>
+
+    <!-- Quiz -->
+    <section id="quiz" class="screen">
+      <div class="progress-container">
+        <div class="progress-bar" id="progress-bar"></div>
+        <span id="progress-text">1 / 10</span>
+      </div>
+      <div id="question-container"></div>
+      <div class="nav-buttons">
+        <button id="prev-btn" class="btn-secondary" disabled>← Voltar</button>
+        <button id="next-btn" class="btn-primary">Próxima →</button>
+      </div>
+    </section>
+
+    <!-- Resultado -->
+    <section id="result" class="screen">
+      <div class="sticker sticker-1">🎉</div>
+      <div class="sticker sticker-2">🐱</div>
+      
+      <h2 class="result-title">Seu Resultado Miaaau! 😻</h2>
+      
+      <div class="result-card">
+        <div class="result-emoji" id="result-emoji">😻</div>
+        <h3 id="result-name">Gatinho Estiloso</h3>
+        <p id="result-description"></p>
+        
+        <div class="result-details">
+          <div class="detail-item">
+            <span class="label">Gênero preferido:</span>
+            <span id="res-gender">-</span>
+          </div>
+          <div class="detail-item">
+            <span class="label">Pelagem dos sonhos:</span>
+            <span id="res-fur">-</span>
+          </div>
+          <div class="detail-item">
+            <span class="label">Raça favorita:</span>
+            <span id="res-breed">-</span>
+          </div>
+          <div class="detail-item">
+            <span class="label">Estilo pet shop:</span>
+            <span id="res-style">-</span>
+          </div>
+        </div>
+        
+        <div class="petshop-list">
+          <h4>🛍️ Lista de Compras no Pet Shop:</h4>
+          <ul id="shopping-list"></ul>
+        </div>
+      </div>
+      
+      <button id="restart-btn" class="btn-primary">Fazer de Novo! 🐾</button>
+    </section>
+  </div>
+
+  <script>
+    const questions = [
+      {
+        id: 1,
+        question: "Seu gatinho é (ou seria) macho ou fêmea? 😺",
+        type: "choice",
+        options: [
+          { 
+            text: "Macho ♂️", 
+            value: "macho", 
+            emoji: "🐈",
+            img:"
+          },
+          { 
+            text: "Fêmea ♀️", 
+            value: "femea", 
+            emoji: "😻",
+            // img: "URL_DA_SUA_IMAGEM_AQUI"
+          },
+          { 
+            text: "Não importa, todos são fofos!", 
+            value: "qualquer", 
+            emoji: "🐱",
+            // img: "URL_DA_SUA_IMAGEM_AQUI"
+          }
+        ]
+      },
+      {
+        id: 2,
+        question: "Qual pelagem deixa seu coração derretido? ✨",
+        type: "choice",
+        options: [
+          { 
+            text: "Pelagem curta e brilhante", 
+            value: "curta", 
+            emoji: "🐈‍⬛",
+            // img: "https://exemplo.com/curta.jpg"
+          },
+          { 
+            text: "Pelagem longa e fofinha", 
+            value: "longa", 
+            emoji: "😻",
+            // img: "https://exemplo.com/longa.jpg"
+          },
+          { 
+            text: "Pelagem sem pelos (Sphynx)", 
+            value: "sem", 
+            emoji: "👽",
+            // img: "https://exemplo.com/sphynx.jpg"
+          },
+          { 
+            text: "Pelagem tricolor / calico", 
+            value: "tricolor", 
+            emoji: "🎨",
+            // img: "https://exemplo.com/calico.jpg"
+          }
+        ]
+      },
+      {
+        id: 3,
+        question: "Qual raça de gato você mais gostaria de ter? 🏆",
+        type: "breed",
+        options: [
+          { text: "Persa", value: "persa", img: "https://images.unsplash.com/photo-1574158622682-e40e69881006?w=200", desc: "Fofinho e calmo" },
+          { text: "Siamês", value: "siames", img: "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=200", desc: "Falante e elegante" },
+          { text: "Maine Coon", value: "maine", img: "https://images.unsplash.com/photo-1615789591457-74a63395c990?w=200", desc: "Gigante gentil" },
+          { text: "British Shorthair", value: "british", img: "https://images.unsplash.com/photo-1596854407944-bf87f6fdd46e?w=200", desc: "Face de ursinho" },
+          { text: "Sphynx", value: "sphynx", img: "https://images.unsplash.com/photo-1573865526739-10659fec78a5?w=200", desc: "Sem pelos e carinhoso" },
+          { text: "Ragdoll", value: "ragdoll", img: "https://images.unsplash.com/photo-1592194996308-7b43878e84a6?w=200", desc: "Relaxado e doce" },
+          { text: "Bengal", value: "bengal", img: "https://images.unsplash.com/photo-1606216794074-735e91aa2c92?w=200", desc: "Selvagem e ativo" },
+          { text: "Munchkin", value: "munchkin", img: "https://images.unsplash.com/photo-1511044568932-338a4412c7b0?w=200", desc: "Patinhas curtinhas" }
+        ]
+      },
+      {
+        id: 4,
+        question: "Com que frequência você levaria seu gato ao pet shop? 🏪",
+        type: "choice",
+        options: [
+          { text: "Toda semana! Adoro mimos", value: "semana", emoji: "💅" },
+          { text: "Uma vez por mês", value: "mes", emoji: "🗓️" },
+          { text: "Só quando precisa (banho/unha)", value: "preciso", emoji: "🛁" },
+          { text: "Raramente, prefiro cuidar em casa", value: "casa", emoji: "🏠" }
+        ]
+      },
+      {
+        id: 5,
+        question: "Quais roupinhas você colocaria no seu gatinho? 👗",
+        type: "multi",
+        options: [
+          { text: "Camisetinha fofa", value: "camiseta", emoji: "👕" },
+          { text: "Moletom com capuz", value: "moletom", emoji: "🧥" },
+          { text: "Vestidinho / saia", value: "vestido", emoji: "👗" },
+          { text: "Nenhuma! Prefiro natural", value: "nenhuma", emoji: "🌿" },
+          { text: "Fantasia temática", value: "fantasia", emoji: "🦸" }
+        ]
+      },
+      {
+        id: 6,
+        question: "Lacinhos e acessórios são essenciais? 🎀",
+        type: "choice",
+        options: [
+          { text: "Sim! Lacinho em tudo 💕", value: "sim", emoji: "🎀" },
+          { text: "Só em ocasiões especiais", value: "especial", emoji: "✨" },
+          { text: "Prefiro coleiras simples e elegantes", value: "coleira", emoji: "📿" },
+          { text: "Nada de acessórios", value: "nao", emoji: "❌" }
+        ]
+      },
+      {
+        id: 7,
+        question: "Qual cuidado de pet shop é prioritário pra você? 💅",
+        type: "choice",
+        options: [
+          { text: "Banho + hidratação da pelagem", value: "banho", emoji: "🛁" },
+          { text: "Corte de unhas e limpeza de orelhas", value: "unhas", emoji: "✂️" },
+          { text: "Escovação e desembolamento", value: "escova", emoji: "🪥" },
+          { text: "Tudo! Pacote completo de spa", value: "spa", emoji: "🧖" }
+        ]
+      },
+      {
+        id: 8,
+        question: "Seu gato no pet shop seria mais... 🌟",
+        type: "choice",
+        options: [
+          { text: "O mais estiloso da sala!", value: "estilo", emoji: "😎" },
+          { text: "Tímido mas fofo", value: "timido", emoji: "🙈" },
+          { text: "Brincalhão e bagunceiro", value: "brinca", emoji: "🤪" },
+          { text: "Rei/Rainha do carinho", value: "carinho", emoji: "😻" }
+        ]
+      },
+      {
+        id: 9,
+        question: "Qual brinquedo ou item você compraria primeiro no pet shop? 🧶",
+        type: "choice",
+        options: [
+          { text: "Varinha com penas e ratinhos", value: "varinha", emoji: "🪶" },
+          { text: "Arranhador grande e fofo", value: "arranhador", emoji: "🪵" },
+          { text: "Bolinha com catnip", value: "bolinha", emoji: "🎾" },
+          { text: "Túnel e casinha de brincar", value: "tunel", emoji: "⛺" }
+        ]
+      },
+      {
+        id: 10,
+        question: "Você levaria seu gato para passear com coleira e peitoral? 🚶‍♂️",
+        type: "choice",
+        options: [
+          { text: "Sim! Adoro passeios juntos", value: "sim", emoji: "🦮" },
+          { text: "Só no quintal ou varanda", value: "quintal", emoji: "🏡" },
+          { text: "Prefiro ele só dentro de casa", value: "casa", emoji: "🏠" },
+          { text: "Talvez no futuro, com muito treino", value: "treino", emoji: "📚" }
+        ]
+      }
+    ];
+
+    let currentQuestion = 0;
+    let answers = {};
+
+    const welcomeScreen = document.getElementById('welcome');
+    const quizScreen = document.getElementById('quiz');
+    const resultScreen = document.getElementById('result');
+    const questionContainer = document.getElementById('question-container');
+    const progressBar = document.getElementById('progress-bar');
+    const progressText = document.getElementById('progress-text');
+    const prevBtn = document.getElementById('prev-btn');
+    const nextBtn = document.getElementById('next-btn');
+    const startBtn = document.getElementById('start-btn');
+    const restartBtn = document.getElementById('restart-btn');
+
+    startBtn.addEventListener('click', () => {
+      welcomeScreen.classList.remove('active');
+      quizScreen.classList.add('active');
+      showQuestion();
+    });
+
+    restartBtn.addEventListener('click', () => {
+      currentQuestion = 0;
+      answers = {};
+      resultScreen.classList.remove('active');
+      welcomeScreen.classList.add('active');
+    });
+
+    prevBtn.addEventListener('click', () => {
+      if (currentQuestion > 0) {
+        currentQuestion--;
+        showQuestion();
+      }
+    });
+
+    nextBtn.addEventListener('click', () => {
+      if (!answers[questions[currentQuestion].id]) {
+        alert('Escolha uma opção antes de continuar! 🐾');
+        return;
+      }
+      if (currentQuestion < questions.length - 1) {
+        currentQuestion++;
+        showQuestion();
+      } else {
+        showResult();
+      }
+    });
+
+    function showQuestion() {
+      const q = questions[currentQuestion];
+      progressBar.style.width = `${((currentQuestion + 1) / questions.length) * 100}%`;
+      progressText.textContent = `${currentQuestion + 1} / ${questions.length}`;
+      prevBtn.disabled = currentQuestion === 0;
+      nextBtn.textContent = currentQuestion === questions.length - 1 ? 'Ver Resultado! 🎉' : 'Próxima →';
+
+      let html = `<h2 class="question-text">${q.question}</h2><div class="options-grid">`;
+
+      q.options.forEach(opt => {
+        const selected = (q.type === 'multi') 
+          ? (answers[q.id] || []).includes(opt.value) ? 'selected' : ''
+          : answers[q.id] === opt.value ? 'selected' : '';
+
+        // ===== AQUI ESTÁ A MÁGICA: funciona com imagem OU emoji =====
+        let visual = opt.img 
+          ? `<img src="${opt.img}" alt="${opt.text}" class="option-img" loading="lazy">`
+          : `<span class="option-emoji">${opt.emoji || '🐱'}</span>`;
+
+        html += `
+          <div class="option-card ${q.type === 'breed' ? 'breed-card' : ''} ${q.type === 'multi' ? 'multi' : ''} ${selected}" data-value="${opt.value}">
+            ${visual}
+            <span class="option-text">${opt.text}</span>
+            ${opt.desc ? `<span class="option-desc">${opt.desc}</span>` : ''}
+          </div>`;
+      });
+
+      html += `</div>`;
+      questionContainer.innerHTML = html;
+
+      document.querySelectorAll('.option-card').forEach(card => {
+        card.addEventListener('click', () => {
+          const value = card.dataset.value;
+          if (q.type === 'multi') {
+            let selected = answers[q.id] || [];
+            if (selected.includes(value)) {
+              selected = selected.filter(v => v !== value);
+              card.classList.remove('selected');
+            } else {
+              selected.push(value);
+              card.classList.add('selected');
+            }
+            answers[q.id] = selected;
+          } else {
+            document.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
+            card.classList.add('selected');
+            answers[q.id] = value;
+          }
+        });
+      });
+    }
+
+    function showResult() {
+      quizScreen.classList.remove('active');
+      resultScreen.classList.add('active');
+
+      const gender = answers[1] || 'qualquer';
+      const fur = answers[2] || 'curta';
+      const breed = answers[3] || 'persa';
+      const freq = answers[4] || 'mes';
+      const clothes = answers[5] || [];
+      const bows = answers[6] || 'especial';
+      const care = answers[7] || 'banho';
+      const personality = answers[8] || 'carinho';
+      const toy = answers[9] || 'varinha';
+      const walk = answers[10] || 'casa';
+
+      const genderMap = { macho: 'Macho ♂️', femea: 'Fêmea ♀️', qualquer: 'Tanto faz 💕' };
+      const furMap = { curta: 'Curta e brilhante', longa: 'Longa e fofinha', sem: 'Sem pelos (Sphynx)', tricolor: 'Tricolor / Calico' };
+      const breedMap = {
+        persa: 'Persa 😺', siames: 'Siamês 😼', maine: 'Maine Coon 🦁',
+        british: 'British Shorthair 🐱', sphynx: 'Sphynx 👽',
+        ragdoll: 'Ragdoll 💤', bengal: 'Bengal 🐆', munchkin: 'Munchkin 🐾'
+      };
+      const styleMap = {
+        estilo: 'O mais estiloso da sala! 😎',
+        timido: 'Tímido mas fofo 🙈',
+        brinca: 'Brincalhão e bagunceiro 🤪',
+        carinho: 'Rei/Rainha do carinho 😻'
+      };
+
+      document.getElementById('res-gender').textContent = genderMap[gender];
+      document.getElementById('res-fur').textContent = furMap[fur];
+      document.getElementById('res-breed').textContent = breedMap[breed];
+      document.getElementById('res-style').textContent = styleMap[personality];
+
+      let name = 'Gatinho Estiloso';
+      let emoji = '😻';
+      let desc = '';
+
+      if (personality === 'estilo' || bows === 'sim') {
+        name = 'Fashionista Felino';
+        emoji = '💅';
+        desc = 'Seu gato é puro glamour! Adora roupinhas, lacinhos e ser o centro das atenções no pet shop.';
+      } else if (personality === 'carinho' || care === 'spa') {
+        name = 'Príncipe/Princesa do Spa';
+        emoji = '🧖';
+        desc = 'Mimos, banhos cheirosos e muito carinho são a prioridade. Seu gato merece o tratamento VIP!';
+      } else if (personality === 'brinca' || toy === 'tunel' || toy === 'varinha') {
+        name = 'Aventureiro das Patinhas';
+        emoji = '🐾';
+        desc = 'Brincalhão e cheio de energia! No pet shop vira a bagunça mais fofa do mundo.';
+      } else if (walk === 'sim') {
+        name = 'Explorador de Rua';
+        emoji = '🦮';
+        desc = 'Adora passear e conhecer o mundo (com segurança, claro!). Um gato corajoso e curioso.';
+      } else {
+        name = 'Gatinho Doce e Tímido';
+        emoji = '🥺';
+        desc = 'Prefere o conforto e os cuidados em casa, mas quando vai ao pet shop encanta a todos com sua fofura.';
+      }
+
+      document.getElementById('result-emoji').textContent = emoji;
+      document.getElementById('result-name').textContent = name;
+      document.getElementById('result-description').textContent = desc;
+
+      // Lista de compras dinâmica
+      const shoppingList = document.getElementById('shopping-list');
+      shoppingList.innerHTML = '';
+
+      const items = [];
+      if (clothes.includes('camiseta') || clothes.includes('moletom') || clothes.includes('vestido') || clothes.includes('fantasia')) {
+        items.push('Roupinhas fofas e confortáveis');
+      }
+      if (bows === 'sim' || bows === 'especial') {
+        items.push('Lacinhos e acessórios estilosos');
+      }
+      if (care === 'banho' || care === 'spa') {
+        items.push('Shampoo e hidratante para pelagem');
+      }
+      if (care === 'unhas' || care === 'spa') {
+        items.push('Kit de corte de unhas');
+      }
+      if (toy === 'varinha') items.push('Varinha com penas e ratinhos');
+      if (toy === 'arranhador') items.push('Arranhador grande e fofo');
+      if (toy === 'bolinha') items.push('Bolinhas com catnip');
+      if (toy === 'tunel') items.push('Túnel e casinha de brincar');
+      if (walk === 'sim') items.push('Peitoral e coleira para passeio');
+
+      if (items.length === 0) {
+        items.push('Brinquedos interativos', 'Arranhador', 'Petiscos saudáveis');
+      }
+
+      items.forEach(item => {
+        const li = document.createElement('li');
+        li.textContent = item;
+        shoppingList.appendChild(li);
+      });
+    }
+  </script>
+</body>
+</html>
