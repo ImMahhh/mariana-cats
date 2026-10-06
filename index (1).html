@@ -510,24 +510,9 @@
         question: "Seu gatinho é (ou seria) macho ou fêmea? 😺",
         type: "choice",
         options: [
-          { 
-            text: "Macho ♂️", 
-            value: "macho", 
-            emoji: "🐈",
-            // img: "42bc48316b0abf12c86a634da2023745.jpg"   ← cole aqui o link do Pinterest
-          },
-          { 
-            text: "Fêmea ♀️", 
-            value: "femea", 
-            emoji: "😻",
-            // img: "98a41e8d060156d84037933e902f8fed.jpg"
-          },
-          { 
-            text: "Não importa, todos são fofos!", 
-            value: "qualquer", 
-            emoji: "🐱",
-            // img: "f5e2daea798692f4f0d86d3dbc3751dd.jpg"
-          }
+          { text: "Macho ♂️", value: "macho", emoji: "🐈" },
+          { text: "Fêmea ♀️", value: "femea", emoji: "😻" },
+          { text: "Não importa, todos são fofos!", value: "qualquer", emoji: "🐱" }
         ]
       },
       {
@@ -535,30 +520,10 @@
         question: "Qual pelagem deixa seu coração derretido? ✨",
         type: "choice",
         options: [
-          { 
-            text: "Pelagem curta e brilhante", 
-            value: "curta", 
-            emoji: "🐈‍⬛",
-            // img: "18481d90a8ebe1c82810d39a87c72268.jpg"
-          },
-          { 
-            text: "Pelagem longa e fofinha", 
-            value: "longa", 
-            emoji: "😻",
-            // img: "https://i.pinimg.com/9f9257c4fbecfad6fdafe9fd34d2aa48.jpg"
-          },
-          { 
-            text: "Pelagem sem pelos (Sphynx)", 
-            value: "sem", 
-            emoji: "👽",
-            // img: "https://i.pinimg.com/a9a8ea386fcb16426b9e1deb53747886.jpg"
-          },
-          { 
-            text: "Pelagem tricolor / calico", 
-            value: "tricolor", 
-            emoji: "🎨",
-            // img: "https://i.pinimg.com/3268d36b2d610a9fdd5d971d914fa75d.jpg"
-          }
+          { text: "Pelagem curta e brilhante", value: "curta", emoji: "🐈‍⬛" },
+          { text: "Pelagem longa e fofinha", value: "longa", emoji: "😻" },
+          { text: "Pelagem sem pelos (Sphynx)", value: "sem", emoji: "👽" },
+          { text: "Pelagem tricolor / calico", value: "tricolor", emoji: "🎨" }
         ]
       },
       {
@@ -569,50 +534,49 @@
           { 
             text: "Persa", 
             value: "persa", 
-            img: "https://images.d84caa40f85fc32f9d0cf5d1b4ecf27f.jpg", 
+            img: "18481d90a8ebe1c82810d39a87c72268.jpg", 
             desc: "Fofinho e calmo" 
-            // Troque o img acima pelo link do Pinterest se quiser
           },
           { 
             text: "Siamês", 
             value: "siames", 
-            img: "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=200", 
+            img: "126190be00db8971c5fa4de619a6fb66.jpg", 
             desc: "Falante e elegante" 
           },
           { 
             text: "Maine Coon", 
             value: "maine", 
-            img: "https://images.unsplash.com/photo-1615789591457-74a63395c990?w=200", 
+            img: "2226b6f5b81e4ef6b5c50bb1e3236754.jpg", 
             desc: "Gigante gentil" 
           },
           { 
             text: "British Shorthair", 
             value: "british", 
-            img: "https://images.unsplash.com/photo-1596854407944-bf87f6fdd46e?w=200", 
+            img: "9d44fd5b5cb2a74350e85c84a3175e83.jpg", 
             desc: "Face de ursinho" 
           },
           { 
             text: "Sphynx", 
             value: "sphynx", 
-            img: "https://images.unsplash.com/photo-1573865526739-10659fec78a5?w=200", 
+            img: "a9a8ea386fcb16426b9e1deb53747886.jpg", 
             desc: "Sem pelos e carinhoso" 
           },
           { 
             text: "Ragdoll", 
             value: "ragdoll", 
-            img: "https://images.unsplash.com/photo-1592194996308-7b43878e84a6?w=200", 
+            img: "2ba5191bc7c04e918d493fe5959fedaa.jpg", 
             desc: "Relaxado e doce" 
           },
           { 
             text: "Bengal", 
             value: "bengal", 
-            img: "https://images.unsplash.com/photo-1606216794074-735e91aa2c92?w=200", 
+            img: "c7e47116899676ed139618510cc8fa78.jpg", 
             desc: "Selvagem e ativo" 
           },
           { 
             text: "Munchkin", 
             value: "munchkin", 
-            img: "https://images.unsplash.com/photo-1511044568932-338a4412c7b0?w=200", 
+            img: "e5d028f5e1cd2ddf074c7001eb6e5703.jpg", 
             desc: "Patinhas curtinhas" 
           }
         ]
@@ -732,10 +696,20 @@
     });
 
     nextBtn.addEventListener('click', () => {
-      if (!answers[questions[currentQuestion].id]) {
-        alert('Escolha uma opção antes de continuar! 🐾');
-        return;
+      const q = questions[currentQuestion];
+      // Validação especial para multi-select
+      if (q.type === 'multi') {
+        if (!answers[q.id] || answers[q.id].length === 0) {
+          alert('Escolha pelo menos uma opção antes de continuar! 🐾');
+          return;
+        }
+      } else {
+        if (!answers[q.id]) {
+          alert('Escolha uma opção antes de continuar! 🐾');
+          return;
+        }
       }
+
       if (currentQuestion < questions.length - 1) {
         currentQuestion++;
         showQuestion();
@@ -758,7 +732,6 @@
           ? (answers[q.id] || []).includes(opt.value) ? 'selected' : ''
           : answers[q.id] === opt.value ? 'selected' : '';
 
-        // Usa imagem se existir, senão usa o emoji
         let visual = opt.img 
           ? `<img src="${opt.img}" alt="${opt.text}" class="option-img" loading="lazy">`
           : `<span class="option-emoji">${opt.emoji || '🐱'}</span>`;
@@ -798,7 +771,7 @@
 
     function showResult() {
       quizScreen.classList.remove('active');
-      resultScreen.classList.add('active');}
+      resultScreen.classList.add('active');
 
       const gender = answers[1] || 'qualquer';
       const fur = answers[2] || 'curta';
@@ -857,3 +830,44 @@
       }
 
       document.getElementById('result-emoji').textContent = emoji;
+      document.getElementById('result-name').textContent = name;
+      document.getElementById('result-description').textContent = desc;
+
+      // Lista de compras personalizada
+      const shopping = [];
+
+      if (clothes.includes('camiseta') || clothes.includes('moletom') || clothes.includes('vestido') || clothes.includes('fantasia')) {
+        shopping.push('Roupinhas fofas (camiseta, moletom ou vestidinho)');
+      }
+      if (bows === 'sim' || bows === 'especial') {
+        shopping.push('Lacinhos e acessórios decorativos');
+      }
+      if (bows === 'coleira' || walk === 'sim' || walk === 'treino') {
+        shopping.push('Coleira + peitoral confortável');
+      }
+      if (care === 'banho' || care === 'spa') {
+        shopping.push('Shampoo e condicionador para gatos');
+      }
+      if (care === 'escova' || fur === 'longa') {
+        shopping.push('Escova / pente para desembolamento');
+      }
+      if (care === 'unhas' || care === 'spa') {
+        shopping.push('Cortador de unhas + limpa-orelhas');
+      }
+      if (toy === 'varinha') shopping.push('Varinha com penas e ratinhos');
+      if (toy === 'arranhador') shopping.push('Arranhador grande e macio');
+      if (toy === 'bolinha') shopping.push('Bolinhas com catnip');
+      if (toy === 'tunel') shopping.push('Túnel + casinha de brincar');
+      if (freq === 'semana' || care === 'spa') {
+        shopping.push('Kit spa completo (máscara + perfume pet)');
+      }
+      if (shopping.length === 0) {
+        shopping.push('Brinquedos interativos', 'Petiscos saudáveis', 'Caminha macia');
+      }
+
+      const listEl = document.getElementById('shopping-list');
+      listEl.innerHTML = shopping.map(item => `<li>${item}</li>`).join('');
+    }
+  </script>
+</body>
+</html>
